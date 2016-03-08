@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col s12 m7">
+
+  <div>{{message}}</div>
+
+    <form autocomplete="off" role="form">
+      <div class="form-group">
+        <fieldset>
+          <input type="search" name="search" id="search" placeholder="Search..." ng-model="search" class="form-control" />
+        </fieldset>
+      </div>
+    </form>
+    <div class="alert alert-warning fade in" ng-repeat="alert in alerts track by $index">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="closeAlertMessage($index)">×</button>
+    </div>
+
+    <div class="card" ng-if="filteredData.length > 0" ng-repeat="card in filteredData = (model | orderBy:predicate:reverse | filter:search)" ng-init="phTags=lkCtrl.parseJson(card.tags)">
+      <div class="card-image">
+        <div style="background-image: url('{{card.photo}}'); min-height: 450px; background-size: cover; background-position: center;">
+        <span class="card-title" style="margin-bottom: 260px;"><a href="#/looks/{{card.id}}">{{card.caption}}</a></span>
+      </div>
+      <div class="card-content">
+        <div id="vit-tag-list">
+          <ul class="hextag" ng-repeat="tg in phTags">
+            <li class="arrow-left"></li>
+            <li class="tagtext">{{tg}}</li>
+            <li class="arrow-right"></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-action">
+
+        <div class="minilogo"></div>
+        <div>
+          <strong>{{card.user}}</strong>
+          <span>{{card.when}}</span>
+        </div>
+        <div class="mdl-layout-spacer"></div>
+        
+        <table class="photo-options">
+          <thead>
+            <tr>
+              <th class="likeIt"><a href=""><span class="material-icons">favorite</span></a></th>
+              <th class="wishIt"><a href=""><span class="material-icons">view_list</span></a></th>
+              <th class="talkIt"><a href=""><span class="material-icons">comment</span></a></th>
+              <th class="shareIt"><a href=""><span class="material-icons">share</span></a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="likeIt">{{model.likes}}</td>
+              <td class="wishIt">2</td>
+              <td class="talkIt">0</td>
+              <td class="shareIt"></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="card-content">
+        No commnets
+      </div>
+
+    </div>
+
+    <div class="card" ng-if="filteredData.length == 0">
+      void
+    </div>
+
+  </div>
+</div>
+

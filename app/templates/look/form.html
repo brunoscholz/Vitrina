@@ -1,0 +1,112 @@
+<div class="row">
+	<form class="col s12" id="post-form" name="postForm" enctype="multipart/form-data">
+		<input type="hidden" ng-model="model.id" />
+		<div class="row">
+			<div class="input-field col s6">
+				<i class="material-icons prefix">account_circle</i>
+				<input placeholder="{{Caption}}" id="caption" name="caption" type="text" class="validate" ng-model="model.caption" length="40">
+				<label class="active" for="caption" data-error="wrong" data-success="OK">Caption</label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="input-field col s6">
+				<div ng-if="!editingFile" class="dropzone dz-clickable" dropzone="dropzoneConfig" style="width:650px; height:650px;">
+					<div class="dz-default dz-message"><span>Drag and drop files here or click to upload</span></div>
+				</div>
+
+				<div ng-if="editingFile" id="dropzone" class="dropzone">
+					<canvas id="look-canvas" width="650" height="650"></canvas>
+					<!--<img id="" data-ng-src="{{ model.url }}" height="{{ model.height }}" width="{{ model.width }}" >-->
+				</div>
+			</div>
+			<div class="input-field col s6">
+				<div id="filterContainer">
+					<div id="filters">
+						<a id="clear-dropzone" ng-click="clearFiles()" class="waves-effect waves-light">
+						  <figure>
+						    <img src="img/filters/cancel.png" alt="StartOver">
+						    <figcaption>
+						      
+						    </figcaption>
+						  </figure>
+						</a>
+
+						<a ng-repeat="filter in photoFilters" ng-click="lkCtrl.applyFilter(filter.name)" class="waves-effect waves-light">
+						  <figure>
+						    <img src="{{filter.image}}" alt="{{filter.name}}">
+						    <figcaption>
+						      {{filter.description}}
+						    </figcaption>
+						  </figure>
+						</a>
+					</div>					
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="bin dropzone" droppable drop="addTag" bin="bin" id="bin1" style="width:100%; height:250px;">
+				<div ng-if="look.tags.length == 0" class="dz-message">
+					<span>Drag and drop Tags here or type them bellow</span>
+				</div>
+				<div id="vit-tag-list">
+					<ul class="hextag" ng-repeat="tg in look.tags">
+						<li class="arrow-left"></li>
+						<li class="tagtext">{{tg}}</li>
+						<li class="arrow-right"></li>
+					</ul>
+				</div>
+			</div>
+			<div ng-controller="TagController as tgCtrl">
+				<div class="input-field col s6">
+					<tags-input ng-model="tgCtrl.selectedTags" placeholder="Add a tag" min-length="3" min-tags="1" add-from-autocomplete-only="true" on-tag-added="lkCtrl.tagAdded($tag)">
+						<auto-complete source="loadTags($query)" template="autocomplete-template"></auto-complete>
+					</tags-input>
+					<label class="active" for="tagInput" data-error="wrong" data-success="right">Tags</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<input id="formtags" type="hidden" ng-model="model.tags" />
+			<button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="postForm.$invalid && !postForm.formtags.$dirty" ng-click="publish()">Publish
+				<i class="material-icons right">send</i>
+			</button>
+
+			<button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="postForm.$invalid" ng-click="promote()">Promote
+				<i class="material-icons right">send</i>
+			</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/ng-template" id="autocomplete-template">
+  <div class="autocomplete-template">
+    <div class="left-align">
+      <i class="material-icons prefix">visibility</i>
+    </div>
+    <div class="right-panel" style="padding: 5px 45px;">
+      <span ng-bind-html="$highlight($getDisplayText())"></span>
+    </div>
+  </div>
+</script>
+
+<!--
+	<i class="material-icons prefix">label</i>
+	display-property="name"
+	
+      <div class="tag-template">
+        <div>
+          <img ng-src="{{data.flag}}" ng-if="data.flag"/>
+        </div>
+        <div>
+          <span>{{$getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+      </div>
+
+
+<div ng-controller="TagController">
+<tags category="tags"></tags>
+</div>
+-->

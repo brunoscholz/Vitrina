@@ -1,0 +1,54 @@
+<div class="row">
+	<div class="col s12 m7">
+		<div class="card" ng-init="phTags=lkCtrl.parseJson(model.tags)">
+			<div class="card-image">
+				<img src="{{model.photo}}">
+				<span class="card-title"><a href="#/looks/{{model.id}}">{{model.caption}}</a></span>
+			</div>
+			<div class="card-content">
+				<div id="vit-tag-list">
+					<ul class="hextag" ng-repeat="tg in phTags">
+						<li class="arrow-left"></li>
+						<li class="tagtext">{{tg}}</li>
+						<li class="arrow-right"></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="card-action">
+
+				<div class="minilogo"></div>
+				<div>
+					<strong>{{model.user}}</strong>
+					<span>{{model.when}}</span>
+				</div>
+				<div class="mdl-layout-spacer"></div>
+				
+				<table class="photo-options">
+					<thead>
+						<tr>
+							<th class="likeIt"><a href=""><span class="material-icons">favorite</span></a></th>
+							<th class="wishIt"><a href=""><span class="material-icons">view_list</span></a></th>
+							<th class="talkIt"><a href=""><span class="material-icons">comment</span></a></th>
+							<th class="shareIt"><a href=""><span class="material-icons">share</span></a></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="likeIt">{{model.likes}}</td>
+							<td class="wishIt">2</td>
+							<td class="talkIt">0</td>
+							<td class="shareIt"></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+			<div class="card-content">
+				No commnets
+			</div>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <base href="/">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= pkg.title %></title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+
+
+    <link rel="stylesheet" type="text/css" href="<%= css %>" media="all" />
+    <style>
+      #view-source {
+        position: fixed;
+        display: block;
+        right: 0;
+        bottom: 0;
+        margin-right: 40px;
+        margin-bottom: 40px;
+        z-index: 900;
+      }
+      [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body ng-cloak ng-controller="AppController">
+    <div ng-include="'header.html'"></div>
+    <div ng-include="'notifications.html'" class="" ng-show="notifications.getCurrent().length"></div>
+    <div ng-view class="section page-transition hero-transition">
+      <div class="section">
+      
+          <div class="row">
+              <div class="col s12 m4">
+                  <div class="card blue-grey darken-1">
+                      <div class="card-content white-text">
+                          <span class="card-title">Header Controller</span>
+                          <p>Location | auth | admin</p>
+                          <p>
+                              {{location}} |
+                              {{isAuthenticated}} |
+                              {{isAdmin}}
+                          </p>
+                      </div>
+                      <div class="card-action">
+                          <a href="/#/looks/create">Create</a>
+                          <a href="/#/looks/0003">View (0003)</a>
+                          <a href="/#/looks">List</a>
+                      </div>
+                  </div>
+              </div>
+              <div class="col s12 m4"></div>
+              <div class="col s12 m4"></div>
+          </div>
+      </div>
+    </div>
+
+    <div ng-include="'footer.html'"></div>
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    <script type="text/javascript" src="<%= js %>"></script>
+  </body>
+</html>
