@@ -1,10 +1,11 @@
-angular.module('app', [
+var app = angular.module('app', [
   'ngRoute',
+  'security',
   'vitrine',
+  'profiles',
   'looks',
   'tags',
-  'services.httpRequestTracker',
-  'security'
+  'services.httpRequestTracker'
 ]);
 
 /*angular.module('app', [
@@ -21,12 +22,12 @@ angular.module('app', [
   'templates.app',
   'templates.common']);*/
 
-angular.module('app').constant('MONGOLAB_CONFIG', {
+app.constant('MONGOLAB_CONFIG', {
   dbName: 'vitrina_test',
   apiKey: 'biAYHuvywGGTtA1KuKxHhAREy2YSURoK' // Our MongoLab API key
 });
 
-angular.module('app').constant('ACTION_REFERENCE', {
+app.constant('ACTION_REFERENCE', {
   'crud.create':'1',
   'crud.remove':'2',
   'crud.update':'3',
@@ -56,15 +57,32 @@ angular.module('app').constant('ACTION_REFERENCE', {
   'financial.propose':'27',
   'path.achieve':'28'
 });
-angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-  $locationProvider.html5Mode({enabled:true});
-  $routeProvider.otherwise({ redirectTo: '/vitrine' });
-}]);
 
-angular.module('app').run(function($rootScope) { //security
+app.config(function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode({enabled:true});
+  //$routeProvider.otherwise({ redirectTo: '/vitrine' });
+  $routeProvider
+    .when('/login', {
+      templateUrl:'profile/login.html',
+      controller: 'LoginController'
+    })
+    .when('/forgot-password', {
+      templateUrl:'profile/forgot_password.html',
+      controller: 'LoginController'
+    })
+    .when('/signup', {
+      templateUrl:'profile/signup.html',
+      controller: 'LoginController'
+    })
+    .otherwise({ redirectTo: '/login' });
+});
+
+app.run(function ($rootScope, security) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
-  //security.requestCurrentUser();
+  security.requestCurrentUser(function (user) {
+    console.log(user);
+  });
 
   // adds some basic utilities to the $rootScope for debugging purposes
   $rootScope.log = function(thing) {
@@ -76,8 +94,33 @@ angular.module('app').run(function($rootScope) { //security
   };
 });
 
+app.controller('LoginController', function ($scope, $location, security) {
 
-angular.module('app').controller('AppController', ['$scope', function($scope) {
+  if(security.isAuthenticated()) {
+    $location.path('/vitrine');
+  }
+
+  $scope.credentials = { username: "", password: "" };
+
+  var onLoginSuccess = function(response) {
+    $location.path('/vitrine');
+  };
+
+  $scope.login = function () {
+    security.login($scope.credentials).success(onLoginSuccess);
+  };
+
+  $scope.forgot = function () {
+    $location.path('/forgot-password');
+  };
+
+  $scope.register = function () {
+    $location.path('/signup');
+  };
+
+});
+
+app.controller('AppController', function ($scope) {
   //$scope.notifications = i18nNotifications;
   $scope.notifications = [
     {
@@ -92,9 +135,10 @@ angular.module('app').controller('AppController', ['$scope', function($scope) {
   $scope.$on('$routeChangeError', function(event, current, previous, rejection){
     console.log('routeChangeError');
   });
-}]);
 
-angular.module('app').controller('HeaderController', ['$scope', '$location', '$route', 'security', 'httpRequestTracker',
+});
+
+app.controller('HeaderController',
   function ($scope, $location, $route, security, httpRequestTracker) {
     $scope.location = $location;
     //$scope.breadcrumbs = breadcrumbs;
@@ -103,7 +147,7 @@ angular.module('app').controller('HeaderController', ['$scope', '$location', '$r
     $scope.isAdmin = security.isAdmin;
 
     $scope.home = function () {
-      if (security.isAuthenticated) {
+      if (security.isAuthenticated()) {
         $location.path('/vitrine');
       } else {
         $location.path('/login');
@@ -117,6 +161,6 @@ angular.module('app').controller('HeaderController', ['$scope', '$location', '$r
     $scope.hasPendingRequests = function () {
       return httpRequestTracker.hasPendingRequests();
     };
-}]);
+});
 
-angular.module('app').value('version', '0.1');
+app.value('version', '0.1');

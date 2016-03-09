@@ -1,103 +1,117 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
-angular.module('security.service', [])
+angular.module('security.service', ["ngSanitize", 'resources.profiles']);
 
-.factory('security', ['$http', '$q', '$location', function($http, $q, $location) {
+angular.module('security.service').factory('security', function ($http, $sanitize, SessionService, FlashService, $location, Profile) {
 
-  // Redirect to the given url (defaults to '/')
-  function redirect(url) {
-    url = url || '/';
-    $location.path(url);
-  }
+  var cacheSession   = function() {
+    SessionService.set('authenticated', true);
+  };
 
-  // Login form dialog stuff
-  /*var loginDialog = null;
-  function openLoginDialog() {
-    if ( loginDialog ) {
-      throw new Error('Trying to open a dialog that is already open!');
-    }
-    loginDialog = $dialog.dialog();
-    loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
-  }
+  var uncacheSession = function() {
+    SessionService.unset('authenticated');
+  };
 
-  function closeLoginDialog(success) {
-    if (loginDialog) {
-      loginDialog.close(success);
-    }
-  }
-  function onLoginDialogClose(success) {
-    loginDialog = null;
-    if ( success ) {
-      queue.retryAll();
-    } else {
-      queue.cancelAll();
-      redirect();
-    }
-  }*/
+  var sanitizeCredentials = function(credentials) {
+    return {
+      username: $sanitize(credentials.username),
+      password: $sanitize(credentials.password)
+    };
+  };
 
   // The public API of the service
   var service = {
-
-    // Get the first reason for needing a login
-    /*getLoginReason: function() {
-      return queue.retryReason();
-    },*/
-
-    // Show the modal login dialog
-    /*showLogin: function() {
-      openLoginDialog();
-    },*/
-
-    // Attempt to authenticate a user by the given email and password
-    login: function(email, password) {
-      var request = $http.post('/login', {email: email, password: password});
-      return request.then(function(response) {
-        service.currentUser = response.data.user;
-        if ( service.isAuthenticated() ) {
-          //closeLoginDialog(true);
-        }
-        return service.isAuthenticated();
-      });
+    login: function (credentials) {
+      var login = $http.post("/auth/login", sanitizeCredentials(credentials));
+      login.success(cacheSession);
+      login.success(FlashService.clear);
+      return login;
+    },
+    logout: function (redirectTo) {
+      var logout = $http.get("/auth/logout");
+      logout.success(uncacheSession);
+      service.currentUser = null;
+      redirect(redirectTo);
+      return logout;
     },
 
-    // Give up trying to login and clear the retry queue
-    cancelLogin: function() {
-      //closeLoginDialog(false);
-      redirect();
-    },
+    currentUser: null,
 
-    // Logout the current user and redirect
-    logout: function(redirectTo) {
-      $http.post('/logout').then(function() {
-        service.currentUser = null;
-        redirect(redirectTo);
-      });
-    },
-
-    // Ask the backend to see if a user is already authenticated - this may be from a previous session.
-    requestCurrentUser: function() {
+    requestCurrentUser: function (cb) {
+      //console.log(sessionStorage);
       if ( service.isAuthenticated() ) {
-        return $q.when(service.currentUser);
-      } else {
+        //return $q.when(service.currentUser);
+        Profile.query({userId:1}).then(function (data) {
+          service.currentUser = data;
+          cb(service.currentUser);
+        });
+      }
+      /*else {
         return $http.get('/current-user').then(function(response) {
           service.currentUser = response.data.user;
           return service.currentUser;
         });
+      }*/
+    },
+
+    isAuthenticated: function () {
+      return SessionService.get('authenticated');
+    },
+    isAdmin: function () {
+      if(service.currentUser) {
+        return service.currentUser.admin;
       }
-    },
-
-    // Information about the current user
-    currentUser: null,
-
-    // Is the current user authenticated?
-    isAuthenticated: function(){
-      return !!service.currentUser;
-    },
-    
-    // Is the current user an adminstrator?
-    isAdmin: function() {
-      return !!(service.currentUser && service.currentUser.admin);
     }
   };
 
   return service;
-}]);
+});
+
+angular.module('security.service').factory("SessionService", function () {
+  return {
+    get: function (key) {
+      return sessionStorage.getItem(key);
+    },
+    set: function (key, val) {
+      return sessionStorage.setItem(key, val);
+    },
+    unset: function (key) {
+      return sessionStorage.removeItem(key);
+    }
+  };
+});
+
+angular.module('security.service').factory("FlashService", function ($rootScope) {
+  return {
+    show: function (message) {
+      $rootScope.flash = message;
+    },
+    clear: function() {
+      $rootScope.flash = "";
+    }
+  };
+});
+
+angular.module('security.service').config(function ($httpProvider) {
+  $httpProvider.interceptors.push(function ($location, $q, SessionService, FlashService) {
+    return {
+      response: function (response) {
+        if(response.data.flash) {
+          FlashService.show(response.data.flash);
+        }
+        return response;
+      },
+      responseError: function (response) {
+        if(response.data.error) {
+          FlashService.show(response.data.error.message);
+        }
+
+        if(response.status === 403) {
+          SessionService.unset('authenticated');
+          $location.path('/login');
+        }
+
+        return $q.reject(response);
+      }
+    };
+  });
+});
