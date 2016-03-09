@@ -1,8 +1,6 @@
-angular.module("app").config(function($routeProvider, $locationProvider) {
 
-  $locationProvider.html5Mode({enabled:true});
 
-  $routeProvider.when('/login', {
+  /*$routeProvider.when('/login', {
     templateUrl: 'profile/login.html',
     controller: 'LoginController'
   });
@@ -34,7 +32,7 @@ angular.module("app").config(function($routeProvider, $locationProvider) {
     }
   });
   $routeProvider.when('/feed', { redirectTo: '/home' });
-  $routeProvider.when('/looks', { redirectTo: '/home' }); //list
+  //$routeProvider.when('/looks', { redirectTo: '/home' }); //list
 
 
   $routeProvider.when('/looks/new', {
@@ -47,14 +45,14 @@ angular.module("app").config(function($routeProvider, $locationProvider) {
       action: function(){return 'new';}
     }
   }); //new
-  $routeProvider.when('/looks/:lookId', {
-    templateUrl: 'look/form.html',
+  $routeProvider.when('/looks/view/:id', {
+    templateUrl: 'look/view.html',
     controller: 'LookController as lkCtrl',
     resolve: {
-      payload: ['LookModel', function ($route, looks) {
-        return looks.getById($route.current.params.id);
-      }],
-      action: function(){return 'edit';}
+      payload: function ($route, LookModel) {
+        return LookModel.getById($route.current.params.id);
+      },
+      action: function(){return 'view';}
     }
   }); //edit
 
@@ -71,8 +69,6 @@ angular.module("app").config(function($routeProvider, $locationProvider) {
         return BookService.getBooks();
       }
     }
-  });
+  });*/
 
-  $routeProvider.otherwise({ redirectTo: '/login' });
-
-});
+  

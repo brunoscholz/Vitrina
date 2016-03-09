@@ -29,7 +29,7 @@
   </head>
   <body ng-cloak ng-controller="AppController">
     <div ng-include="'header.html'"></div>
-    <div ng-include="'notifications.html'" class="" ng-show="notifications.getCurrent().length"></div>
+    <div ng-include="'notifications.html'" class="" ng-show="notifications.length"></div>
     <div ng-view class="section page-transition hero-transition">
       <div class="section">
       

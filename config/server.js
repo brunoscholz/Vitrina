@@ -29,9 +29,10 @@ module.exports = {
         {title: 'Treasure Island', author: 'Stephenson'}
       ]);
     });
-
-    app.get('/looks', function(req, res) {
-      
-    });
+    
+    /*app.all('/*', function(req, res) {
+      // Just send the index.html for other files to support HTML5Mode
+      res.sendfile('index.html', { root: 'C:/Users/bruno_000/Documents/Oction/luxoreLine/generated' });
+    });*/
   }
 };

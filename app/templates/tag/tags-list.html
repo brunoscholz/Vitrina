@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="input-field col s6">
+        <tags-input ng-model="selectedTags" placeholder="Add a tag" min-length="3" min-tags="1" add-from-autocomplete-only="true" on-tag-added="tagAdded($tag)">
+            <auto-complete source="loadTags($query)" template="autocomplete-template"></auto-complete>
+        </tags-input>
+        <label class="active" for="tagInput" data-error="wrong" data-success="right">Tags</label>
+    </div>
+</div>
+
+<div>
+    <p>Query</p>
+    <span>{{testQuery}}</span>
+</div>
+
+<div>
+    <p>Selected</p>
+    <span>{{selectedTags}}</span>
+</div>
+
+<div>
+    <p>Raw</p>
+    <span>{{rawtags}}</span>
+</div>
+
+<script type="text/ng-template" id="autocomplete-template">
+  <div class="autocomplete-template">
+    <div class="left-align">
+      <i class="material-icons prefix">visibility</i>
+    </div>
+    <div class="right-panel" style="padding: 5px 45px;">
+      <span ng-bind-html="$highlight($getDisplayText())"></span>
+    </div>
+  </div>
+</script>

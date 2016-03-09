@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col s12 m7">
 
-  <div>{{message}}</div>
+  <div>simple add form (modal maybe)</div>
 
     <form autocomplete="off" role="form">
       <div class="form-group">
@@ -14,12 +14,13 @@
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="closeAlertMessage($index)">×</button>
     </div>
 
-    <div class="card" ng-if="filteredData.length > 0" ng-repeat="card in filteredData = (model | orderBy:predicate:reverse | filter:search)" ng-init="phTags=lkCtrl.parseJson(card.tags)">
+    <div class="card" ng-if="filteredData.length > 0" ng-repeat="card in filteredData = (model | orderBy:predicate:reverse | filter:search)" ng-init="phTags=parseJson(card.tags)">
       <div class="card-image">
         <div style="background-image: url('{{card.photo}}'); min-height: 450px; background-size: cover; background-position: center;">
-        <span class="card-title" style="margin-bottom: 260px;"><a href="#/looks/{{card.id}}">{{card.caption}}</a></span>
+        <span class="card-title" style="margin-bottom: 260px;"><a ng-click="viewLook(card)">{{card.caption}}</a></span>
       </div>
       <div class="card-content">
+        {{card.id}}
         <div id="vit-tag-list">
           <ul class="hextag" ng-repeat="tg in phTags">
             <li class="arrow-left"></li>

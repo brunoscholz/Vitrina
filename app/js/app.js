@@ -1,40 +1,32 @@
-var Luxore = angular.module("app", [
-  "ngResource",
-  "ngRoute",
-  'mongolabResource',
-  "app.Look"
+angular.module('app', [
+  'ngRoute',
+  'vitrine',
+  'looks',
+  'tags',
+  'services.httpRequestTracker',
+  'security'
 ]);
 
-Luxore.run(function($rootScope) {
-  // adds some basic utilities to the $rootScope for debugging purposes
-  $rootScope.log = function(thing) {
-    console.log(thing);
-  };
+/*angular.module('app', [
+  'ngRoute',
+  'projectsinfo',
+  'dashboard',
+  'projects',
+  'admin',
+  'services.breadcrumbs',
+  'services.i18nNotifications',
+  'services.httpRequestTracker',
+  'security',
+  'directives.crud',
+  'templates.app',
+  'templates.common']);*/
 
-  $rootScope.alert = function(thing) {
-    alert(thing);
-  };
-});
-
-Luxore.controller('AppController', ['$scope',
-  function($scope) {
-  //$scope.notifications = i18nNotifications;
-}])
-
-.controller('HeaderController', ['$scope',
-  function ($scope) {
-
-  $scope.home = function () {
-
-  };
-}]);
-
-Luxore.constant('MONGOLAB_CONFIG', {
+angular.module('app').constant('MONGOLAB_CONFIG', {
   dbName: 'vitrina_test',
   apiKey: 'biAYHuvywGGTtA1KuKxHhAREy2YSURoK' // Our MongoLab API key
 });
 
-Luxore.constant('ACTION_REFERENCE', {
+angular.module('app').constant('ACTION_REFERENCE', {
   'crud.create':'1',
   'crud.remove':'2',
   'crud.update':'3',
@@ -64,26 +56,67 @@ Luxore.constant('ACTION_REFERENCE', {
   'financial.propose':'27',
   'path.achieve':'28'
 });
+angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode({enabled:true});
+  $routeProvider.otherwise({ redirectTo: '/vitrine' });
+}]);
 
-Luxore.value('version', '0.1');
+angular.module('app').run(function($rootScope) { //security
+  // Get the current user when the application starts
+  // (in case they are still logged in from a previous session)
+  //security.requestCurrentUser();
 
-Luxore.BaseController = (function () {
+  // adds some basic utilities to the $rootScope for debugging purposes
+  $rootScope.log = function(thing) {
+    console.log(thing);
+  };
 
-    function BaseController($scope) {
-        var me = this;
+  $rootScope.alert = function(thing) {
+    alert(thing);
+  };
+});
 
-        me.$scope = $scope;
 
-        me.$scope.$on("$destroy", function () {
-            me.onDispose();
-        });
+angular.module('app').controller('AppController', ['$scope', function($scope) {
+  //$scope.notifications = i18nNotifications;
+  $scope.notifications = [
+    {
+      type: 'error',
+      message: 'dummy error!'
+    },
+    {
+      type: 'success',
+      message: 'success for nothing!!'
     }
+  ];
+  $scope.$on('$routeChangeError', function(event, current, previous, rejection){
+    console.log('routeChangeError');
+  });
+}]);
 
-    BaseController.prototype.onDispose = function () {
-        var me = this;
+angular.module('app').controller('HeaderController', ['$scope', '$location', '$route', 'security', 'httpRequestTracker',
+  function ($scope, $location, $route, security, httpRequestTracker) {
+    $scope.location = $location;
+    //$scope.breadcrumbs = breadcrumbs;
 
-        console.log(me.name + ".dtor");
+    $scope.isAuthenticated = security.isAuthenticated;
+    $scope.isAdmin = security.isAdmin;
+
+    $scope.home = function () {
+      if (security.isAuthenticated) {
+        $location.path('/vitrine');
+      } else {
+        $location.path('/login');
+      }
     };
 
-    return BaseController;
-}) ();
+    $scope.isNavbarActive = function (navBarPath) {
+      //return navBarPath === breadcrumbs.getFirst().name;
+    };
+
+    $scope.hasPendingRequests = function () {
+      return httpRequestTracker.hasPendingRequests();
+    };
+}]);
+
+angular.module('app').value('version', '0.1');
