@@ -17,7 +17,8 @@ module.exports = function(lineman) {
       ],
       app: [
         "app/js/app.js",
-        "app/js/commom/security/*.js",
+        "app/js/commom/security/index.js",
+        "app/js/commom/security/security.js",
         "app/js/commom/**/*.js",
         "app/js/mongolab.js",
         "app/js/vitrine/vitrine.js",
