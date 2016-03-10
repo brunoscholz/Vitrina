@@ -2,7 +2,7 @@ angular.module('app').service('languageService', function ($rootScope, $window, 
 
     $rootScope.languages = [
         { id: 'en', name: 'English' },
-        { id: 'pt', name: 'Português' },
+        { id: 'pt_BR', name: 'Português' },
         { id: 'es', name: 'Español' }
     ];
 

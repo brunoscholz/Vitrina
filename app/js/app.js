@@ -1,5 +1,6 @@
 var app = angular.module('app', [
   'ngRoute',
+  'gettext',
   'security',
   'vitrine',
   'profiles',
@@ -41,7 +42,7 @@ app.config(function ($routeProvider, $locationProvider) {
     .otherwise({ redirectTo: '/login' });
 });
 
-app.run(function ($rootScope, security, languageService) {
+app.run(function ($rootScope, security, languageService, gettextCatalog) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser(function (user) {
@@ -49,6 +50,9 @@ app.run(function ($rootScope, security, languageService) {
   });
 
   languageService();
+  //$rootScope.lang.id
+  gettextCatalog.debug = true;
+  gettextCatalog.currentLanguage = 'pt_BR';
   
   // adds some basic utilities to the $rootScope for debugging purposes
   $rootScope.log = function(thing) {

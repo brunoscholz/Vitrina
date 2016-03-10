@@ -15,6 +15,9 @@
     "lineman-less": "0.0.1",
     "protractor": "^1.4.0"
   },
+  "dependencies": {
+    "grunt-angular-gettext": "^2.1.11"
+  },
   "scripts": {
     "start": "lineman run",
     "test": "lineman spec-ci"

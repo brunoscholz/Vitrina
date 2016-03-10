@@ -37,6 +37,23 @@ module.exports = function(lineman) {
       //   host: 'localhost',
       //   port: 3000
       // }
+    },
+
+    nggettext_compile: {
+        all: {
+            options: {
+                module: 'app'
+            },
+            files: {
+                'app/js/translations.js': ['po/*.po']
+            }
+        }
+    },
+
+    loadNpmTasks: lineman.config.application.loadNpmTasks.concat("grunt-angular-gettext"),
+
+    appendTasks: {
+      common: ["nggettext_compile"]
     }
 
     // Sass
