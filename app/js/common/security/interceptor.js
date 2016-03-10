@@ -1,6 +1,6 @@
 angular.module('security.interceptor', ['security.retryQueue'])
   .config(function ($httpProvider) {
-  $httpProvider.interceptors.push(function ($location, $q, $injector, queue, SessionService, FlashService) {
+  $httpProvider.interceptors.push(function ($location, $q, $injector, securityRetryQueue, SessionService, FlashService) {
     return {
       request: function (config) {
         // console.log(config); // Contains the data about the request before it is sent.
@@ -34,7 +34,7 @@ angular.module('security.interceptor', ['security.retryQueue'])
 
         if(response.status === 401) {
           // unauthorized
-          return queue.pushRetryFn('unauthorized-server', function retryRequest() {
+          return securityRetryQueue.pushRetryFn('unauthorized-server', function retryRequest() {
             return $injector.get('$http')(response.config);
           });
         }

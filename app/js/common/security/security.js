@@ -1,5 +1,10 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
-angular.module('security.service', ["ngSanitize", 'resources.profiles']);
+angular.module('security.service', [
+  "ngSanitize", 
+  'resources.profiles',
+  'security.retryQueue',    // Keeps track of failed requests that need to be retried once the user logs in
+  'security.login'         // Contains the login form template and controller
+]);
 
 angular.module('security.service').factory('security', function ($http, $sanitize, SessionService, FlashService, $location, Profile) {
 

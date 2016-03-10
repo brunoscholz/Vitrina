@@ -1,8 +1,8 @@
-angular.module('security.login.form', ['services.localizedMessages'])
+angular.module('security.login.form', ['gettext'])
 
 // The LoginFormController provides the behaviour behind a reusable form to allow users to authenticate.
 // This controller and its template (login/form.tpl.html) are used in a modal dialog box by the security service.
-.controller('LoginFormController', ['$scope', 'security', 'localizedMessages', function($scope, security, localizedMessages) {
+.controller('LoginFormController', function ($scope, security, gettextCatalog) {
   // The model for this form 
   $scope.user = {};
 
@@ -14,8 +14,8 @@ angular.module('security.login.form', ['services.localizedMessages'])
   $scope.authReason = null;
   if ( security.getLoginReason() ) {
     $scope.authReason = ( security.isAuthenticated() ) ?
-      localizedMessages.get('login.reason.notAuthorized') :
-      localizedMessages.get('login.reason.notAuthenticated');
+      gettextCatalog.getString('login.reason.notAuthorized') :
+      gettextCatalog.getString('login.reason.notAuthenticated');
   }
 
   // Attempt to authenticate the user specified in the form's model
@@ -27,11 +27,11 @@ angular.module('security.login.form', ['services.localizedMessages'])
     security.login($scope.user.email, $scope.user.password).then(function(loggedIn) {
       if ( !loggedIn ) {
         // If we get here then the login failed due to bad credentials
-        $scope.authError = localizedMessages.get('login.error.invalidCredentials');
+        $scope.authError = gettextCatalog.getString('login.error.invalidCredentials');
       }
     }, function(x) {
       // If we get here then there was a problem with the login request to the server
-      $scope.authError = localizedMessages.get('login.error.serverError', { exception: x });
+      $scope.authError = gettextCatalog.getString('login.error.serverError');
     });
   };
 
@@ -42,4 +42,4 @@ angular.module('security.login.form', ['services.localizedMessages'])
   $scope.cancelLogin = function() {
     security.cancelLogin();
   };
-}]);
+});
