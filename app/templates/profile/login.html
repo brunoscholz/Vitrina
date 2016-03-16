@@ -1,47 +1,137 @@
 <div class="container">
-  <div id="login-page" class="row">
-    <div class="col s12 z-depth-4 card-panel">
-      <form class="login-form" ng-submit="login()">
-        <div class="row">
-          <div class="input-field col s12 center">
-            <img src="images/login-logo.png" alt="" class="circle responsive-img valign profile-image-login">
-            <p class="center login-form-text">Luxore</p>
-          </div>
+  <div class="row">
+
+    <div class="col s12 m8 l6 push-l3 push-m2 z-depth-4 card-panel">
+      <ul class="tabs" style="overflow: hidden;">
+        <li class="tab col s3"><a class="active" href="#signin">{{'SignIn'|translate}}</a></li>
+        <li class="tab col s3"><a href="#signup">{{'SignUp'|translate}}</a></li>
+        <li class="tab col s3"><a href="#options">{{'Options'|translate}}</a></li>
+      </ul>
+
+      <div class="divider" style="margin-bottom: 16px;"></div>
+      
+      <div class="row">
+        <div id="signin" class="col s12">
+          <form ng-submit="login()">
+            <div class="row">
+              <div class="input-field col s12 center">
+                <img src="images/login-logo.png" alt="" class="circle responsive-img valign profile-image-login">
+                <p class="center login-form-text">Luxore</p>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s10 m10 l10 push-l1 push-m1 push-s1">
+                <i class="mdi-social-person-outline prefix"></i>
+                <input type="text" name="username" placeholder="{{'Username'|translate}}" ng-model="credentials.username" required/>
+                <label for="username" class="center-align">{{'Username'|translate}}</label>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s10 m10 l10 push-l1 push-m1 push-s1">
+                <i class="mdi-action-lock-outline prefix"></i>
+                <input type="password" name="password" placeholder="{{'Password'|translate}}" ng-model="credentials.password" required/>
+                <label for="password">{{'Password'|translate}}</label>
+              </div>
+            </div>
+            <div class="row">          
+              <div class="input-field col s10 m10 l10 push-l1 push-m1 push-s1 login-text">
+                  <input type="checkbox" id="remember-me" ng-model="credentials.remember"/>
+                  <label for="remember-me">{{'Remember me'|translate}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s10 m10 l6 push-l3 push-m1 push-s1">
+                <button class="btn waves-effect waves-light col s12" type="submit" name="action">{{'Sign in'|translate}}</button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-social-person-outline prefix"></i>
-            <input type="text" name="username" placeholder="username" ng-model="credentials.username" required/>
-            <label for="username" class="center-align">Username</label>
-          </div>
+
+        <div id="signup" class="col s12">
+          <form ng-submit="signup()">
+            <div class="row">
+              <div class="input-field col s12 center">
+                <p class="center login-form-text">Register</p>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s12">
+                <i class="mdi-social-person-outline prefix"></i>
+                <input id="username" type="text">
+                <label for="username" class="center-align">Username</label>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s12">
+                <i class="mdi-communication-email prefix"></i>
+                <input id="email" type="email">
+                <label for="email" class="center-align">Email</label>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s12">
+                <i class="mdi-action-lock-outline prefix"></i>
+                <input id="password" type="password">
+                <label for="password">Password</label>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s12">
+                <i class="mdi-action-lock-outline prefix"></i>
+                <input id="password-again" type="password">
+                <label for="password-again">Password again</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <button class="btn waves-effect waves-light col s12" type="submit" name="action">Register Now</button>
+              </div>
+              <div class="input-field col s12">
+                <p class="margin center medium-small sign-up">Already have an account? <a href="page-login.html">Login</a></p>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-action-lock-outline prefix"></i>
-            <input type="password" name="password" placeholder="password" ng-model="credentials.password" required/>
-            <label for="password">Password</label>
-          </div>
+        
+        <div id="options" class="col s12">
+          <form ng-submit="forgot()">
+            <div class="row">
+              <div class="input-field col s12 center">
+                <h4>Forgot Password</h4>
+                <p class="center">You can reset your password</p>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s12">
+                <i class="mdi-social-person-outline prefix"></i>
+                <input id="username" type="text">
+                <label for="username" class="center-align">Username</label>
+              </div>
+            </div>
+            <div class="row margin">
+              <div class="input-field col s12">
+                <i class="mdi-action-lock-outline prefix"></i>
+                <input id="password" type="password">
+                <label for="password">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <button class="btn waves-effect waves-light col s12" type="submit" name="action">Reset Password</button>
+              </div>
+              <div class="input-field col s12">
+                <p class="margin sign-up"><a href="page-login.html">Login</a> <a href="page-register.html" class="right">Register</a></p>
+              </div>
+            </div>
+          </form>
+          <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Facebook</a>
+          <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Twitter</a>
+          <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>g+</a>
+          <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Instagram</a>
         </div>
-        <div class="row">          
-          <div class="input-field col s12 m12 l12  login-text">
-              <input type="checkbox" id="remember-me" ng-model="credentials.remember"/>
-              <label for="remember-me">Remember me</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <button class="btn waves-effect waves-light col s12" type="submit" name="action">Login</button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s6 m6 l6">
-            <p class="margin medium-small"><a href="register()">Register Now!</a></p>
-          </div>
-          <div class="input-field col s6 m6 l6">
-              <p class="margin right-align medium-small"><a href="forgot()">Forgot password ?</a></p>
-          </div>          
-        </div>
-      </form>
+      </div>
+      
     </div>
+
   </div>
 </div>

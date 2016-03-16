@@ -1,6 +1,10 @@
 angular.module('resources.profiles', ['mongolabResource']);
 angular.module('resources.profiles').factory('Profile', ['mongolabResource', function ($mongolabResource) {
-  var Reference = $mongolabResource('profile');
+  var profile = $mongolabResource('profile');
 
-  return Reference;
+  profile.forUser = function (user) {
+    return profile.query({userId:user._id.$oid});
+  };
+
+  return profile;
 }]);

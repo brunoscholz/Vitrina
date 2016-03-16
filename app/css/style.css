@@ -1028,3 +1028,66 @@ div#vit-tag-list ul.hextag .tagtext {
 #flight-card .card-header .card-title {
   padding: 20px;
 }
+
+/*   Pre loader    */
+
+#intro-loader {
+  background: #222;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100000;
+}
+
+.oval1 {
+  width: 80px;
+  height: 50px;
+  background: #0277bd;
+  border-radius: 50%;
+}
+
+.oval2 {
+  width: 70px;
+  height: 40px;
+  background: #00897b;
+  border-radius: 50%;
+}
+
+.oval3 {
+  width: 60px;
+  height: 30px;
+  background: #f44336;
+  border-radius: 50%;
+}
+
+.anim1 {
+  animation: spin 1s linear infinite;
+}
+
+.anim2 {
+  animation: spin .75s linear infinite;
+}
+
+.anim3 {
+  animation: spin .5s linear infinite;
+}
+
+.gem {
+  display: inline-block;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.2em;
+  position: absolute;
+  left:50%;
+  top: 50%;
+  transform-origin: top left;
+  transform-style: preserve-3D;
+  opacity: 0.75;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg)
+  }
+}

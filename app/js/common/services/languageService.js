@@ -1,9 +1,9 @@
 angular.module('app').service('languageService', function ($rootScope, $window, gettextCatalog) {
 
     $rootScope.languages = [
-        { id: 'en', name: 'English' },
-        { id: 'pt_BR', name: 'Português' },
-        { id: 'es', name: 'Español' }
+        { id: 'en', name: 'English', country: 'us' },
+        { id: 'pt_BR', name: 'Português', country: 'br' },
+        { id: 'es', name: 'Español', country: 'es' }
     ];
 
     /*
@@ -22,6 +22,7 @@ angular.module('app').service('languageService', function ($rootScope, $window, 
         if (lang) {
             $rootScope.lang = lang;
             $rootScope.selectedLang = $rootScope.lang.id;
+            $rootScope.selectedCountry = $rootScope.lang.country;
             gettextCatalog.setCurrentLanguage(lang.id);
             console.log('Language changed to:', lang.name);
         }
@@ -46,6 +47,9 @@ angular.module('app').service('languageService', function ($rootScope, $window, 
     return function () {
         $rootScope.lang = detectLang();
         $rootScope.selectedLang = $rootScope.lang.id;
+        $rootScope.selectedCountry = $rootScope.lang.country;
+        // console.log($rootScope.lang);
+        // console.log($rootScope.selectedLang);
         gettextCatalog.setCurrentLanguage($rootScope.lang.id);
     };
 

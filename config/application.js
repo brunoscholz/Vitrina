@@ -25,6 +25,10 @@ module.exports = function(lineman) {
 
     server: {
       pushState: true
+
+      /*web: {
+        port: 9000
+      }*/
       // API Proxying
       //
       // During development, you'll likely want to make XHR (AJAX) requests to an API on the same
@@ -37,6 +41,14 @@ module.exports = function(lineman) {
       //   host: 'localhost',
       //   port: 3000
       // }
+    },
+
+    nggettext_extract: {
+      pot: {
+        files: {
+          'po/template.pot': ['app/templates/*.html']
+        }
+      },
     },
 
     nggettext_compile: {
@@ -71,6 +83,10 @@ module.exports = function(lineman) {
     // via grunt-asset-fingerprint
     //
     // enableAssetFingerprint: true
+
+    /*removeTasks: {
+      common: ["jshint"]
+    }*/
 
   };
 };

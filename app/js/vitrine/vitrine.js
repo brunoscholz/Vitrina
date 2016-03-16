@@ -1,7 +1,7 @@
-angular.module('vitrine', ['resources.lookModel']);
+angular.module('vitrine', ['resources.lookModel', 'security.authorization']);
 
 angular.module('vitrine').config(
-  function ($routeProvider) {
+  function ($routeProvider, securityAuthorizationProvider) {
     $routeProvider
       .when('/vitrine', {
         templateUrl:'home.html',
@@ -11,13 +11,16 @@ angular.module('vitrine').config(
             //TODO: need to know the current user here
             return LookModel.all();
           }
-        }
+        },
+        authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser
+        //currentUser: securityAuthorizationProvider.requireAdminUser
       });
   }
 );
 
 angular.module('vitrine').controller('VitrineController', 
   function ($scope, payload, $location) {
+
     $scope.model = payload;
 
     $scope.parseJson = function(set) {

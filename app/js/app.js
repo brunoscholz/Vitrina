@@ -6,6 +6,8 @@ var app = angular.module('app', [
   'profiles',
   'looks',
   'tags',
+  'resources.users',
+  'resources.profiles',
   'services.httpRequestTracker'
 ]);
 
@@ -23,7 +25,7 @@ var app = angular.module('app', [
   'templates.app',
   'templates.common']);*/
 
-app.config(function ($routeProvider, $locationProvider) {
+app.config(function ($routeProvider, $locationProvider, $httpProvider) {
   $locationProvider.html5Mode({enabled:true});
   //$routeProvider.otherwise({ redirectTo: '/vitrine' });
   $routeProvider
@@ -40,20 +42,40 @@ app.config(function ($routeProvider, $locationProvider) {
       controller: 'LoginController'
     })
     .otherwise({ redirectTo: '/login' });
+
+    var spinnerFunction = function (data, headers) {
+        $('#intro-loader').show();
+        return data;
+    };
+    $httpProvider.defaults.transformRequest.push(spinnerFunction);
 });
 
-app.run(function ($rootScope, security, languageService, gettextCatalog) {
+app.run(function ($rootScope, security, languageService, gettextCatalog, User, Profile) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser(function (user) {
     console.log(user);
   });
 
+/*  var credentials = { username: "bruno@oction.com.br", password: "Oeka8LIK" };
+  User.checkUser(credentials, function (user) {
+    var currentUser = user;
+    Profile.forUser(user, function (profile) {
+      currentUser.profile = profile;
+      console.log(currentUser);
+    });
+  });*/
+
+  console.log(sessionStorage);
+
   languageService();
-  //$rootScope.lang.id
   gettextCatalog.debug = true;
-  gettextCatalog.currentLanguage = 'pt_BR';
-  
+  //gettextCatalog.currentLanguage = 'pt_BR';
+
+  /*$rootScope.searchQueryChanged = function(query) {
+    $rootScope.searchQuery = query;
+  };*/
+
   // adds some basic utilities to the $rootScope for debugging purposes
   $rootScope.log = function(thing) {
     console.log(thing);
@@ -90,7 +112,7 @@ app.controller('LoginController', function ($scope, $location, security) {
 
 });
 
-app.controller('AppController', function ($scope) {
+app.controller('AppController', function ($scope, $http) {
   //$scope.notifications = i18nNotifications;
   $scope.notifications = [
     {
@@ -102,6 +124,11 @@ app.controller('AppController', function ($scope) {
       message: 'success for nothing!!'
     }
   ];
+
+  $http.get('http://vitrina.brazilsouth.cloudapp.azure.com:7000/api/dapps/11172989537083733196/api/messages/list?recipientId=9425224196345016949L').then(function (res) {
+    console.log (res.data);
+  });
+
   $scope.$on('$routeChangeError', function(event, current, previous, rejection){
     console.log('routeChangeError');
   });
@@ -122,6 +149,10 @@ app.controller('HeaderController',
       } else {
         $location.path('/login');
       }
+    };
+
+    $scope.profile = function () {
+      $location.path('/profile');
     };
 
     $scope.isNavbarActive = function (navBarPath) {
@@ -169,4 +200,29 @@ app.constant('ACTION_REFERENCE', {
   'financial.invest':'26',
   'financial.propose':'27',
   'path.achieve':'28'
+});
+
+app.factory('promiseFactory', function($q) {
+  return {
+    decorate: function(promise) {
+      promise.success = function(callback) {
+        promise.then(callback);
+
+        return promise;
+      };
+
+      promise.error = function(callback) {
+        promise.then(null, callback);
+
+        return promise;
+      };
+    },
+    defer: function() {
+      var deferred = $q.defer();
+
+      this.decorate(deferred.promise);
+
+      return deferred;
+    }
+  };
 });

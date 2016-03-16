@@ -30,12 +30,12 @@ module.exports = {
     app.use(express.cookieParser(secret));
     app.use(express.cookieSession());
     app.use(express.csrf({value: csrfValue}));
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
       res.cookie('XSRF-TOKEN', req.csrfToken());
       next();
     });
 
-    app.post('/auth/login', function(req, res) {
+    app.post('/auth/login', function (req, res) {
       if(req.body.username !== 'bruno') {
         res.json({ error: { message: 'Invalid Username or Password' }}, 401);
       } else {
@@ -43,7 +43,11 @@ module.exports = {
       }
     });
 
-    app.get('/expire-my-session', function(req, res) {
+    app.get('/auth/logged', function (req, res) {
+      res.send(200);
+    });
+
+    app.get('/expire-my-session', function (req, res) {
       res.json({error: { message: 'Session Expired' }}, 403);
     });
 
@@ -51,11 +55,11 @@ module.exports = {
       res.json(cards);
     });*/
 
-    app.post('/login', function(req, res) {
+    app.post('/login', function (req, res) {
       res.json({ message: 'logging in!' });
     });
 
-    app.post('/logout', function(req, res) {
+    app.post('/logout', function (req, res) {
       res.json({ message: 'logging out!'});
     });
   }

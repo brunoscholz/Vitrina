@@ -7,28 +7,36 @@ angular.module('security.interceptor', ['security.retryQueue'])
         if (!SessionService.isAnonymous) {
           config.headers['x-session-token'] = SessionService.token;
         }
+        //console.log(config);
         // Return the config or wrap it in a promise if blank.
+        $('#intro-loader').delay(200).fadeOut();
         return config || $q.when(config);
       },
       requestError: function (rejection) {
         // console.log(rejection); // Contains the data about the error on the request.
         // Return the promise rejection.
+        $('#intro-loader').delay(200).fadeOut();
         return $q.reject(rejection);
       },
       response: function (response) {
         if(response.data.flash) {
+          console.log(response.data.flash);
           FlashService.show(response.data.flash);
         }
+        $('#intro-loader').delay(200).fadeOut();
         return response || $q.when(response);
       },
       responseError: function (response) {
+        $('#intro-loader').delay(200).fadeOut();
         if(response.data.error) {
+          console.log(response.data.error.message);
           FlashService.show(response.data.error.message);
         }
 
         if(response.status === 403) {
           // anauthenticated
           SessionService.unset('authenticated');
+          console.log('authenticated');
           $location.path('/login');
         }
 
@@ -52,7 +60,7 @@ angular.module('security.interceptor', ['security.retryQueue'])
         }
 
         return $q.reject(response);
-      }
+      },
     };
   });
 });
