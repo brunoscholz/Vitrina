@@ -29,7 +29,7 @@
   </head>
   <body ng-cloak ng-controller="AppController">
 
-    <!-- Intro loader -->
+    <!-- Intro loader / splash -->
     <div id="intro-loader">
       <div class="gem oval1 anim1"></div>
       <div class="gem oval2 anim2"></div>
@@ -38,12 +38,17 @@
     <!-- Intro loader -->
 
     <div ng-include="'header.html'"></div>
-    <div ng-include="'notifications.html'" class="" ng-show="notifications.length"></div>
-    <ng-include src="'flash.html'"></ng-include>
-    <div ng-view class="section page-transition hero-transition">
-      Error loading AngularJS view..
-    </div>
-    <div ng-include="'footer.html'"></div>
+
+    <main>
+
+      <div ng-include="'notifications.html'" class="" ng-show="notifications.length"></div>
+      <ng-include src="'flash.html'"></ng-include>
+      <div ng-view class="section page-transition hero-transition">
+        Error loading AngularJS view..
+      </div>
+      <div ng-include="'footer.html'"></div>
+      
+    </main>
 
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!-- Compiled and minified JavaScript -->

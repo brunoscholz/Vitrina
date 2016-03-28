@@ -2,7 +2,17 @@
 	$(function(){
 
     $('#intro-loader').delay(200).fadeOut();
-		$('.button-collapse').sideNav();
+		
+    $('.button-collapse').sideNav({
+      menuWidth: 300, // Default is 240
+      //edge: 'right', // Choose the horizontal origin
+      closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+    });
+
+    $('.collapsible').collapsible({
+      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+
 		$('input, textarea').characterCounter();
     $('.tooltipped').tooltip({delay: 50, position: 'bottom'});
 
@@ -19,11 +29,11 @@
 
     $('a.translation-button').dropdown();
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('select').material_select();
     });
 
-    $(document).ready(function(){
+    $(document).ready(function () {
       $('ul.tabs').tabs();
     });
 

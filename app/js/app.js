@@ -5,6 +5,7 @@ var app = angular.module('app', [
   'vitrine',
   'profiles',
   'looks',
+  'friends',
   'tags',
   'resources.users',
   'resources.profiles',
@@ -112,7 +113,7 @@ app.controller('LoginController', function ($scope, $location, security) {
 
 });
 
-app.controller('AppController', function ($scope, $http) {
+app.controller('AppController', function ($scope) {
   //$scope.notifications = i18nNotifications;
   $scope.notifications = [
     {
@@ -124,10 +125,6 @@ app.controller('AppController', function ($scope, $http) {
       message: 'success for nothing!!'
     }
   ];
-
-  $http.get('http://vitrina.brazilsouth.cloudapp.azure.com:7000/api/dapps/11172989537083733196/api/messages/list?recipientId=9425224196345016949L').then(function (res) {
-    console.log (res.data);
-  });
 
   $scope.$on('$routeChangeError', function(event, current, previous, rejection){
     console.log('routeChangeError');
@@ -151,6 +148,29 @@ app.controller('HeaderController',
       }
     };
 
+    $scope.topMenu = [
+      {name:'Dashboard', url: '/dash', icon: 'view_module'},
+      {name:'Dashboard', url: '/dash', icon: 'assessment'},
+      {name:'Dashboard', url: '/dash', icon: 'shopping_cart'},
+      {name:'Dashboard', url: '/dash', icon: 'settings'},
+      {name:'Dashboard', url: '/dash', icon: 'album'}
+    ];
+
+    $scope.menu = [
+      {name:'About', url: '/about'},
+      {name:'Search', url: '/search'},
+      {name:'Profile', url: '/profile'},
+      {name:'Activities', url: '/activities'},
+      {name:'Listr', url: '/listr'},
+      {name:'Spaces', url: '/spaces'},
+      {name:'Friends', url: '/friends'},
+      {name:'Newspaper', url: '/newspaper'},
+      {name:'Achievements', url: '/achievements'},
+      {name:'Guided Tour', url: '/guided-tour'},
+      {name:'Settings', url: '/settings'},
+      {name:'Help', url: '/help'}
+    ];
+
     $scope.profile = function () {
       $location.path('/profile');
     };
@@ -161,6 +181,12 @@ app.controller('HeaderController',
 
     $scope.hasPendingRequests = function () {
       return httpRequestTracker.hasPendingRequests();
+    };
+
+    $scope.redirect = function (url) {
+      url = url || '/';
+      console.log("redirecting to " + url);
+      $location.path(url);
     };
 });
 

@@ -3,6 +3,16 @@
 
   <div>simple add form (modal maybe)</div>
 
+  <div class="row">
+    <p>{{msg}}</p>
+    <p>{{messages}}</p>
+  </div>
+
+  <div class="row">
+    <input type="text" name="messenger" id="messenger" placeholder="send msg..." ng-model="msg" class="form-control" />
+    <button type="button" ng-click="sendMessage()">send</button>
+  </div>
+
     <form autocomplete="off" role="form">
       <div class="form-group">
         <fieldset>
